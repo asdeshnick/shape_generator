@@ -37,17 +37,16 @@ def shapes_intersect(shape1, shape2):
 fig = go.Figure()
 
 # Устанавливаем размеры холста
-width = 500  # ширина холста
-height = 500  # высота холста
-grid_denominator = 10  # параметр для расчета плотности сетки
-
-# Рассчитываем шаг сетки по осям
-x_step = width / grid_denominator  # шаг между вертикальными линиями сетки
-y_step = height / grid_denominator - (grid_denominator // 2)  # шаг между горизонтальными линиями сетки
+width = 500  
+height = 500  
+grid_denominator = 10  # размер клетки 
 
 
-# Цикл для рисования горизонтальных линий сетки
-# Проходит по всем Y-координатам с шагом y_step
+x_step = width / grid_denominator  
+y_step = height / grid_denominator - (grid_denominator // 2)  
+
+
+
 for y in np.arange(0, width, y_step):
     fig.add_trace(go.Scatter(
         x=[0, width],
@@ -58,8 +57,7 @@ for y in np.arange(0, width, y_step):
         hoverinfo='none'   # отключить всплывающие подсказки
     ))
 
-# Цикл для рисования вертикальных линий сетки
-# Проходит по всем X-координатам с шагом x_step
+
 for x in np.arange(0, height, x_step):
     fig.add_trace(go.Scatter(
         x=[x, x],
@@ -71,28 +69,23 @@ for x in np.arange(0, height, x_step):
     ))
 
 # Параметры для генерации случайных фигур
-num_shapes = random.randint(5, 15)  # случайное количество фигур (от 5 до 15)
-min_radius = 3   # минимальный радиус для кругов
-max_radius = 15  # максимальный радиус для кругов
-square_size = 15  # размер стороны квадрата
+num_shapes = random.randint(5, 15)  
+min_radius = 3   
+max_radius = 15  
+square_size = 15  
 
-# Список для хранения информации о размещенных фигурах
+
 placed_shapes = []
 
 # Основной цикл генерации фигур
-# Создает случайное количество фигур (num_shapes)
 for _ in range(num_shapes):
-    # Счетчик попыток для предотвращения бесконечного цикла
     attempts = 0
     max_attempts = 100
     valid_position = False
             
-    # Цикл поиска валидной позиции для новой фигуры
-    # Пытается найти непересекающуюся позицию до max_attempts раз
     while not valid_position and attempts < max_attempts:
         attempts += 1
-        
-        # Случайно выбираем тип фигуры для отрисовки
+    
         shape_type = random.choice(['flower', 'grass'])
         
         if shape_type == 'grass':  # Круг (трава)
@@ -100,7 +93,6 @@ for _ in range(num_shapes):
             circle_x = random.randint(radius, width - radius) + 20
             circle_y = random.randint(radius, height - radius) - 20
             
-            # Создаем объект для проверки пересечений
             new_shape = {
                 'type': 'circle',
                 'x': circle_x,
@@ -108,14 +100,12 @@ for _ in range(num_shapes):
                 'radius': radius
             }
             
-            # Проверяем пересечение с существующими фигурами
             intersects = False
             for existing_shape in placed_shapes:
                 if shapes_intersect(new_shape, existing_shape):
                     intersects = True
                     break
             
-            # Если нет пересечений, сохраняем и рисуем
             if not intersects:
                 placed_shapes.append(new_shape)
                 fig.add_trace(go.Scatter(
@@ -132,13 +122,11 @@ for _ in range(num_shapes):
                 valid_position = True
         
         else:   # Обработка квадратов (цветы)
-                # Генерация параметров квадрата
             square_x = random.randint(0, width - square_size) + 20
             square_y = random.randint(0, height - square_size) - 20
             square_x_end = square_x + square_size
             square_y_end = square_y + square_size
             
-            # Создаем объект для проверки пересечений
             new_shape = {
                 'type': 'square',
                 'x': square_x,
@@ -146,42 +134,40 @@ for _ in range(num_shapes):
                 'size': square_size
             }
             
-            # Проверяем пересечение с существующими фигурами
             intersects = False
             for existing_shape in placed_shapes:
                 if shapes_intersect(new_shape, existing_shape):
                     intersects = True
                     break
             
-            # Если нет пересечений, сохраняем и рисуем
             if not intersects:
                 placed_shapes.append(new_shape)
                 fig.add_trace(go.Scatter(
                     x=[square_x, square_x, square_x_end, square_x_end, square_x],
                     y=[square_y, square_y_end, square_y_end, square_y, square_y],
                     mode='lines',
-                    fill='toself',                              # заполнение внутренней области
-                    fillcolor='rgba(0, 0, 255, 0.3)',           # полупрозрачная синяя заливка
-                    line=dict(color='blue', width=2),           # синяя граница
-                    name=f'трава ({square_size}x{square_size})' # подпись в легенде
+                    fill='toself',                             
+                    fillcolor='rgba(0, 0, 255, 0.3)',          
+                    line=dict(color='blue', width=2),        
+                    name=f'трава ({square_size}x{square_size})' 
                 ))
                 valid_position = True
 
 # Настраиваем внешний вид графика
 fig.update_layout(
-    plot_bgcolor='white',  # белый фон области графика
+    plot_bgcolor='white',  
     xaxis=dict(
-        range=[0, width],  # диапазон оси X
-        dtick=50           # шаг сетки 50 единиц
+        range=[0, width],  
+        dtick=50           
     ),
     yaxis=dict(
-        range=[0, height],  # диапазон оси Y
-        dtick=50            # шаг сетки 50 единиц
+        range=[0, height],
+        dtick=50            
     ),
-    width=700,                  # ширина фигуры в пикселях
-    height=700,                 # высота фигуры в пикселях
-    title='Алхимик 500х500'     # заголовок графика
+    width=700,                 
+    height=700,                 
+    title='Алхимик 500х500'    
 )
 
-# Отображаем фигуру
+
 fig.show()
