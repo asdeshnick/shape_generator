@@ -46,15 +46,14 @@ x_step = width / grid_denominator
 y_step = height / grid_denominator - (grid_denominator // 2)  
 
 
-
 for y in np.arange(0, width, y_step):
     fig.add_trace(go.Scatter(
         x=[0, width],
         y=[y, y],
         mode='lines',
-        line=dict(color='lightgray', width=0.5),  # светло-серые тонкие линии
-        showlegend=False,  # не показывать в легенде
-        hoverinfo='none'   # отключить всплывающие подсказки
+        line=dict(color='lightgray', width=0.5), 
+        showlegend=False,  
+        hoverinfo='none'   
     ))
 
 
@@ -117,7 +116,7 @@ for _ in range(num_shapes):
                         color='rgba(255, 0, 0, 0.5)',   # полупрозрачный красный
                         line=dict(width=2, color='red') # красная граница
                     ),
-                    name=f'цветок (R={radius})'    # подпись в легенде
+                    name=f'цветок (R={radius})'   
                 ))
                 valid_position = True
         
